@@ -10,4 +10,5 @@ MySQL Ver 14.14
 ```
 npm install
 npm start
+listen on http://localhost:3000/
 ```
