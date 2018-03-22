@@ -5,6 +5,7 @@
 Node v9.6.1
 npm v5.6.0
 MySQL Ver 14.14
+Redis
 ```
 ## Run
 ```
