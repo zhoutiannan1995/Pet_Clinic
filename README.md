@@ -13,3 +13,5 @@ npm install
 npm start
 listen on http://localhost:5188/
 ```
+## Test (with Mocha)
+npm test

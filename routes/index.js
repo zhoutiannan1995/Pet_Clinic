@@ -6,11 +6,8 @@ let router = express.Router();
 
 //首页
 router.get('/', function(req, res) {
-  connection.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
-    if (err) throw err;
-    console.log('The solution is: ', rows[0].solution);
-  });
-  res.render('index', { title: 'Express' });
+  res.send({code: '000', msg: 'Welcome to the Pet Clinic System!'})
+  //res.render('index', { title: 'Express' });
 });
 
 //登录

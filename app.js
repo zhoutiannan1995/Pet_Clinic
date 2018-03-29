@@ -14,7 +14,7 @@ let config = {
     "sessionStore": {
         "host": "127.0.0.1",
         "port": "6379",
-        "pass": "12345678",
+        //"pass": "12345678",
         "db": 1,
         "ttl": 1800,
         "logErrors": true
