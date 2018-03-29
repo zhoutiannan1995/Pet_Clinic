@@ -6,5 +6,5 @@ CREATE TABLE `pc_user` (
   `create_time` datetime,
   `last_access_time` datetime,
   `authority` int(11) NOT NULL,
-  PRIMARY KEY (`user_id`)
+  PRIMARY KEY (`username`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;

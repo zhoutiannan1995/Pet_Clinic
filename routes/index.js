@@ -36,7 +36,7 @@ router.post('/login', function(req, res) {
 //登出
 router.get('/logout', Auth, function (req, res) {
   req.session.destroy();
-  res.send("logout success!");
+  res.send({code: '000', msg: '注销成功'});
 });
 
 module.exports = router;

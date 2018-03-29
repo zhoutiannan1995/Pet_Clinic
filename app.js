@@ -6,6 +6,7 @@ let cookieParser = require('cookie-parser');
 let bodyParser = require('body-parser');
 let session = require('express-session');
 let RedisStrore = require('connect-redis')(session);
+let cors = require('cors');
 let config = {
     "cookie": {
         "maxAge": 1800000
@@ -46,6 +47,7 @@ app.use(session({
     cookie : config.cookie,
     store : new RedisStrore(config.sessionStore)
 }));
+app.use(cors());
 
 //配置路由
 app.use('/', routes);

@@ -14,7 +14,7 @@ router.get('/allList', Auth, function (req, res) {
       rows.forEach(e => {
         console.log(e);
       });
-      res.send(rows);
+      res.send({code:'000', data: rows});
     });
   } catch (err) { console.log(err); }
   //res.send('respond with a resource');
@@ -30,7 +30,7 @@ router.get('/allList/:username', Auth, function (req, res) {
       rows.forEach(e => {
         console.log(e);
       });
-      res.send(rows);
+      res.send({code: '000', data: rows});
     });
   } catch (err) { console.log(err); }
 });
@@ -44,7 +44,7 @@ router.post('/addUser', Auth, function (req, res) {
     connection.query(sql, function (err, rows, fields) {
       if (err) throw err;
       console.log("增加用户成功!username:", user.username);
-      res.send(rows);
+      res.send({code: '000', data: rows});
     });
   } catch (err) { console.log(err); }
 });
@@ -57,7 +57,7 @@ router.post('/delUser', Auth, function (req, res) {
     connection.query(sql, function (err, rows, fields) {
       if (err) throw err;
       console.log("删除用户成功!username:", user.username);
-      res.send(rows);
+      res.send({code: '000', data: rows});
     });
   } catch (err) { console.log(err); }
 });
