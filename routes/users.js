@@ -43,7 +43,20 @@ router.post('/addUser', Auth, function (req, res) {
         sql = `INSERT INTO pc_db.pc_user (username, password, create_time, last_access_time, authority) VALUES ('${user.username}','${user.password}','${now}','${now}',${user.authority})`;
     connection.query(sql, function (err, rows, fields) {
       if (err) throw err;
-      console.log("successssssssssssss!");
+      console.log("增加用户成功!username:", user.username);
+      res.send(rows);
+    });
+  } catch (err) { console.log(err); }
+});
+
+//删除用户
+router.post('/delUser', Auth, function (req, res) {
+  try {
+    let user = req.body.data,
+        sql = `DELETE FROM pc_db.pc_user WHERE username='${user.username}'`;
+    connection.query(sql, function (err, rows, fields) {
+      if (err) throw err;
+      console.log("删除用户成功!username:", user.username);
       res.send(rows);
     });
   } catch (err) { console.log(err); }
