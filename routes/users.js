@@ -6,15 +6,19 @@ let Auth = require('../lib/Auth');
 let router = express.Router();
 
 //获取所有用户列表
-router.get('/allList', Auth, function (req, res) {
+router.get('/allList', Auth, async function (req, res) {
   let pageSize = req.query.pageSize * 1,
-      curPage = req.query.curPage * pageSize;
+      curPage = req.query.curPage * pageSize,
+      maxPage = 0;
   let sql = `SELECT * FROM pc_db.pc_user LIMIT ${curPage} , ${pageSize}`;
-  connection.query(sql, function (err, result) {
-    if (err) res.send({ code: '999', msg: err });
-    res.send({ code: '000', data: result });
+  await connection.query('SELECT COUNT(*) FROM pc_db.pc_user', function (err, result) {
+    if (err) res.send({ code: '999', msg: err});
+    maxPage = Math.ceil(result[0]["COUNT(*)"] / pageSize);
   });
-  //res.send('respond with a resource');
+  await connection.query(sql, function (err, result) {
+    if (err) res.send({ code: '999', msg: err });
+    res.send({ code: '000', maxPage: maxPage, data: result });
+  });
 });
 
 //按用户名查找
@@ -60,8 +64,10 @@ router.post('/delUser', Auth, function (req, res) {
     sql = `DELETE FROM pc_db.pc_user WHERE username='${user.username}'`;
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
-    console.log("删除用户成功!username:", user.username);
-    res.send({ code: '000', data: result });
+    else {
+      console.log("删除用户成功!username:", user.username);
+      res.send({ code: '000', data: result });
+    }
   });
 });
 

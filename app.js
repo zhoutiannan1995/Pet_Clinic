@@ -24,6 +24,9 @@ let config = {
 // 路由信息（接口地址），存放在routes的根目录
 let routes = require('./routes/index');
 let users = require('./routes/users');
+let dikind = require('./routes/dikind');
+let diname = require('./routes/diname');
+let dicase = require('./routes/dicase');
 
 let app = express();
 
@@ -52,6 +55,9 @@ app.use(cors());
 //配置路由
 app.use('/', routes);
 app.use('/users', users);
+app.use('/dikind', dikind);
+app.use('/diname', diname);
+app.use('/case', dicase);
 
 /// catch 404 and forward to error handler
 app.use(function (req, res, next) {
