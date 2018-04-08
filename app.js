@@ -16,7 +16,7 @@ let config = {
         "port": "6379",
         //"pass": "12345678",
         "db": 1,
-        "ttl": 1800,
+        "ttl": 18000,
         "logErrors": true
     }
 }
@@ -40,7 +40,8 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+//app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static('public'));
 app.use(session({
     name : "pcsid",
     secret : 'keyboard cat',
@@ -57,7 +58,7 @@ app.use('/', routes);
 app.use('/users', users);
 app.use('/dikind', dikind);
 app.use('/diname', diname);
-app.use('/case', dicase);
+app.use('/dicase', dicase);
 
 /// catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -9,6 +9,7 @@ router.get('/allList', Auth, async function (req, res) {
   let pageSize = req.query.pageSize * 1,
       curPage = req.query.curPage * pageSize,
       maxPage = 0;
+  if (curPage < 0) res.send({code: '999', msg: 'curPage不能小于零！'});
   let sql = `SELECT * FROM pc_db.pc_dikind LIMIT ${curPage} , ${pageSize}`;
   await connection.query('SELECT COUNT(*) FROM pc_db.pc_dikind', function (err, result) {
     if (err) res.send({ code: '999', msg: err});
@@ -59,11 +60,11 @@ router.post('/modifyDikind', Auth, function (req, res) {
 //删除病种
 router.post('/delDikind', Auth, function (req, res) {
   let dikind = req.body.data,
-    sql = `DELETE FROM pc_db.pc_dikind WHERE dikind_name='${dikind.dikind_name}'`;
+    sql = `DELETE FROM pc_db.pc_dikind WHERE dikind_id=${dikind.dikind_id}`;
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
     else {
-      console.log("删除病种成功!dikind_name:", dikind.dikind_name);
+      console.log("删除病种成功!dikind_id:", dikind.dikind_id);
       res.send({ code: '000', data: result });
     }
   });

@@ -42,3 +42,16 @@ curl -X POST -H "Content-Type: application/json" -d @test/json/diname.json -b ./
 
 # 删除病名
 curl -X POST -H "Content-Type: application/json" -d @test/json/diname.json -b ./test/cookie/cookie.txt http://localhost:5188/diname/delDiname
+
+# 查询病例
+curl -b ./test/cookie/cookie.txt "http://localhost:5188/dicase/allList?pageSize=5&curPage=0"
+curl -b ./test/cookie/cookie.txt "http://localhost:5188/dicase/allList/%E4%B8%80%E8%B5%B7%E9%AA%A8%E6%8A%98%E6%A1%88%E4%BE%8B"
+
+# 增加病例
+curl -X POST -H "Content-Type: application/json" -d @test/json/diname.json -b ./test/cookie/cookie.txt http://localhost:5188/diname/addDiname
+
+# 修改病例
+curl -X POST -H "Content-Type: application/json" -d @test/json/diname.json -b ./test/cookie/cookie.txt http://localhost:5188/diname/modifyDiname
+
+# 删除病例
+curl -X POST -H "Content-Type: application/json" -d @test/json/diname.json -b ./test/cookie/cookie.txt http://localhost:5188/diname/delDiname

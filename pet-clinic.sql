@@ -41,6 +41,60 @@ CREATE TABLE `pc_dicase` (
   UNIQUE KEY (`dicase_name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `pc_department`;
+CREATE TABLE `pc_department` (
+  `dpm_id` int(11) NOT NULL AUTO_INCREMENT,
+  `dpm_name` varchar(255) NOT NULL,
+  `dpm_des` varchar(255) NOT NULL,
+  PRIMARY KEY (`dpm_id`),
+  UNIQUE KEY (`dpm_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `pc_stay`;
+CREATE TABLE `pc_stay` (
+  `stay_id` int(11) NOT NULL AUTO_INCREMENT,
+  `patient_name` varchar(255) NOT NULL,
+  `stay_starttime` datetime NOT NULL,
+  `stay_endtime` datetime NOT NULL,
+  PRIMARY KEY (`stay_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `pc_medicine`;
+CREATE TABLE `pc_medicine` (
+  `medicine_id` int(11) NOT NULL AUTO_INCREMENT,
+  `medicine_name` varchar(255) NOT NULL,
+  `medicine_des` varchar(255) NOT NULL,
+  PRIMARY KEY (`medicine_id`),
+  UNIQUE KEY (`medicine_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `pc_pay`;
+CREATE TABLE `pc_pay` (
+  `pay_id` int(11) NOT NULL AUTO_INCREMENT,
+  `pay_name` varchar(255) NOT NULL,
+  `pay_amount` varchar(255) NOT NULL,
+  PRIMARY KEY (`pay_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `pc_assay`;
+CREATE TABLE `pc_assay` (
+  `assay_id` int(11) NOT NULL AUTO_INCREMENT,
+  `assay_name` varchar(255) NOT NULL,
+  PRIMARY KEY (`assay_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `pc_test`;
+CREATE TABLE `pc_test` (
+  `test_id` int(11) NOT NULL AUTO_INCREMENT,
+  `test_question` varchar(255) NOT NULL,
+  `choice_A` varchar(255) NOT NULL,
+  `choice_B` varchar(255) NOT NULL,
+  `choice_C` varchar(255) NOT NULL,
+  `choice_D` varchar(255) NOT NULL,
+  `choice_correct` varchar(255) NOT NULL,
+  PRIMARY KEY (`test_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
 INSERT INTO `pc_user` SET username = "admin", password = "admin", authority=0, create_time="2018-04-08";
 INSERT INTO `pc_user` SET username = "xiaoming", password = "12345", authority=1, create_time="2018-04-08";
 

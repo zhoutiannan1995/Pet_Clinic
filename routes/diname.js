@@ -9,6 +9,7 @@ router.get('/allList', Auth, async function (req, res) {
   let pageSize = req.query.pageSize * 1,
       curPage = req.query.curPage * pageSize,
       maxPage = 0;
+  if (curPage < 0) res.send({code: '999', msg: 'curPage不能小于零！'});
   let sql = `SELECT * FROM ((SELECT * FROM pc_db.pc_diname LIMIT ${curPage} , ${pageSize}) A LEFT JOIN pc_db.pc_dikind USING (dikind_id))`;
   await connection.query('SELECT COUNT(*) FROM pc_db.pc_diname', function (err, result) {
     if (err) res.send({ code: '999', msg: err});

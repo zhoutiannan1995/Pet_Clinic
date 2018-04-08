@@ -4,13 +4,14 @@ let Auth = require('../lib/Auth');
 
 let router = express.Router();
 
-//获取所有病名列表
+//获取所有病例列表
 router.get('/allList', Auth, async function (req, res) {
   let pageSize = req.query.pageSize * 1,
       curPage = req.query.curPage * pageSize,
       maxPage = 0;
-  let sql = `SELECT * FROM ((SELECT * FROM pc_db.pc_diname LIMIT ${curPage} , ${pageSize}) A LEFT JOIN pc_db.pc_dikind USING (dikind_id))`;
-  await connection.query('SELECT COUNT(*) FROM pc_db.pc_diname', function (err, result) {
+  if (curPage < 0) res.send({code: '999', msg: 'curPage不能小于零！'});
+  let sql = `SELECT * FROM ((SELECT * FROM pc_db.pc_dicase LIMIT ${curPage} , ${pageSize}) A LEFT JOIN pc_db.pc_diname USING (diname_id) LEFT JOIN pc_db.pc_dikind USING (dikind_id))`;
+  await connection.query('SELECT COUNT(*) FROM pc_db.pc_dicase', function (err, result) {
     if (err) res.send({ code: '999', msg: err});
     maxPage = Math.ceil(result[0]["COUNT(*)"] / pageSize);
   });
@@ -20,17 +21,17 @@ router.get('/allList', Auth, async function (req, res) {
   });
 });
 
-//按病名查找
-router.get('/allList/:case_name', Auth, function (req, res) {
-  let case_name = req.params.case_name;
-  let sql = `SELECT * FROM ((SELECT * FROM pc_db.pc_diname WHERE case_name='${case_name}') A LEFT JOIN pc_db.pc_dikind USING (dikind_id))`;
+//按病例查找
+router.get('/allList/:dicase_name', Auth, function (req, res) {
+  let dicase_name = req.params.dicase_name;
+  let sql = `SELECT * FROM ((SELECT * FROM pc_db.pc_dicase WHERE dicase_name='${dicase_name}') A LEFT JOIN pc_db.pc_diname USING (diname_id) LEFT JOIN pc_db.pc_dikind USING (dikind_id))`;
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
     res.send({ code: '000', data: result });
   });
 });
 
-//增加病名
+//增加病例
 router.post('/addDiname', Auth, function (req, res) {
   let diname = req.body.data;
   let sql = `INSERT INTO pc_db.pc_diname (case_name, diname_des, dikind_id) VALUES ('${diname.case_name}','${diname.diname_des}','${diname.dikind_id}')`;
@@ -43,7 +44,7 @@ router.post('/addDiname', Auth, function (req, res) {
   });
 });
 
-//修改病名
+//修改病例
 router.post('/modifyDiname', Auth, function (req, res) {
   let diname = req.body.data,
     sql = `UPDATE pc_db.pc_diname SET diname_des='${diname.diname_des}', dikind_id=${diname.dikind_id} WHERE case_name='${diname.case_name}'`;
@@ -56,7 +57,7 @@ router.post('/modifyDiname', Auth, function (req, res) {
   });
 });
 
-//删除病名
+//删除病例
 router.post('/delDiname', Auth, function (req, res) {
   let diname = req.body.data,
     sql = `DELETE FROM pc_db.pc_diname WHERE case_name='${diname.case_name}'`;
