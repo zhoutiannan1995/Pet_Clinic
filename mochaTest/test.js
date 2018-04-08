@@ -115,7 +115,7 @@ describe('用户管理模块', function () {
     });
 
     it('should respond with a list of all users', function (done) {
-        var req = request(app).get('/users/allList');
+        var req = request(app).get('/users/allList?pageSize=5&curPage=0');
         req.cookies = Cookies;
         req
             .expect(200)
@@ -136,8 +136,6 @@ describe('用户管理模块', function () {
                 "data": {
                     "username": "xiaogang",
                     "password": "xiaogang",
-                    "create_time": "2018-03-29 00:00:00",
-                    "last_access_time": "2018-03-29 00:00:00",
                     "authority": 0
                 }
             })

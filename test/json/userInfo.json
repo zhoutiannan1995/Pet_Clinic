@@ -1,9 +1,8 @@
 {
     "data": {
-        "username": "xiaoming",
-        "password": "apple",
+        "username": "copper",
+        "password": "zhouanbang",
         "create_time": "2018-03-12 00:00:00",
-        "last_access_time": "2018-03-12 00:00:00",
-        "authority": 0
+        "authority": 1
     }
 }

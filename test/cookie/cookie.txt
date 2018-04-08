@@ -1,8 +1,9 @@
 HTTP/1.1 200 OK
 X-Powered-By: Express
+Access-Control-Allow-Origin: *
 Content-Type: application/json
 Content-Length: 35
-set-cookie: pcsid=s%3Ad4rfhSTvK71PK2r8V5DD4RQsSVn97Fw1.dLZEkeldGZl4Xv6eghP5O%2B57rtNCHp9GfPyEv2c2PyU; Path=/; Expires=Thu, 29 Mar 2018 05:51:55 GMT; HttpOnly
-Date: Thu, 29 Mar 2018 05:21:55 GMT
+set-cookie: pcsid=s%3AnEGPsbFYz1BdH0QH4Ft7MP5INgiOTd0r.9mZMwuyEzuzfzzlfPP9bbv1Lfe88mHjjj4gPLSEdYvY; Path=/; Expires=Sun, 08 Apr 2018 01:46:23 GMT; HttpOnly
+Date: Sun, 08 Apr 2018 01:16:23 GMT
 Connection: keep-alive
 

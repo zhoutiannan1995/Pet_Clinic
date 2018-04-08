@@ -7,59 +7,62 @@ let router = express.Router();
 
 //获取所有用户列表
 router.get('/allList', Auth, function (req, res) {
-  try {
-    let sql = 'SELECT * FROM pc_db.pc_user';
-    connection.query(sql, function (err, rows, fields) {
-      if (err) throw err;
-      rows.forEach(e => {
-        console.log(e);
-      });
-      res.send({code:'000', data: rows});
-    });
-  } catch (err) { console.log(err); }
+  let pageSize = req.query.pageSize * 1,
+      curPage = req.query.curPage * pageSize;
+  let sql = `SELECT * FROM pc_db.pc_user LIMIT ${curPage} , ${pageSize}`;
+  connection.query(sql, function (err, result) {
+    if (err) res.send({ code: '999', msg: err });
+    res.send({ code: '000', data: result });
+  });
   //res.send('respond with a resource');
 });
 
 //按用户名查找
 router.get('/allList/:username', Auth, function (req, res) {
-  try {
-    let username = req.params.username;
-    let sql = `SELECT * FROM pc_db.pc_user WHERE username='${username}'`;
-    connection.query(sql, function (err, rows, fields) {
-      if (err) throw err;
-      rows.forEach(e => {
-        console.log(e);
-      });
-      res.send({code: '000', data: rows});
-    });
-  } catch (err) { console.log(err); }
+  let username = req.params.username;
+  let sql = `SELECT * FROM pc_db.pc_user WHERE username='${username}'`;
+  connection.query(sql, function (err, result) {
+    if (err) res.send({ code: '999', msg: err });
+    res.send({ code: '000', data: result });
+  });
 });
 
 //增加用户
 router.post('/addUser', Auth, function (req, res) {
-  try {
-    let user = req.body.data,
-        now = moment().format("YYYY-MM-DD HH:mm:ss"),
-        sql = `INSERT INTO pc_db.pc_user (username, password, create_time, last_access_time, authority) VALUES ('${user.username}','${user.password}','${now}','${now}',${user.authority})`;
-    connection.query(sql, function (err, rows, fields) {
-      if (err) throw err;
+  let user = req.body.data,
+    now = moment().format("YYYY-MM-DD HH:mm:ss"),
+    sql = `INSERT INTO pc_db.pc_user (username, password, create_time, authority) VALUES ('${user.username}','${user.password}','${now}',${user.authority})`;
+  connection.query(sql, function (err, result) {
+    if (err) res.send({ code: '999', msg: err });
+    else {
       console.log("增加用户成功!username:", user.username);
-      res.send({code: '000', data: rows});
-    });
-  } catch (err) { console.log(err); }
+      res.send({ code: '000', data: result });
+    }
+  });
+});
+
+//修改用户
+router.post('/modifyUser', Auth, function (req, res) {
+  let user = req.body.data,
+    sql = `UPDATE pc_db.pc_user SET password='${user.password}', authority=${user.authority} WHERE username='${user.username}'`;
+  connection.query(sql, function (err, result) {
+    if (err) res.send({ code: '999', msg: err });
+    else {
+      console.log("修改用户成功!username:", user.username);
+      res.send({ code: '000', data: result });
+    }
+  });
 });
 
 //删除用户
 router.post('/delUser', Auth, function (req, res) {
-  try {
-    let user = req.body.data,
-        sql = `DELETE FROM pc_db.pc_user WHERE username='${user.username}'`;
-    connection.query(sql, function (err, rows, fields) {
-      if (err) throw err;
-      console.log("删除用户成功!username:", user.username);
-      res.send({code: '000', data: rows});
-    });
-  } catch (err) { console.log(err); }
+  let user = req.body.data,
+    sql = `DELETE FROM pc_db.pc_user WHERE username='${user.username}'`;
+  connection.query(sql, function (err, result) {
+    if (err) res.send({ code: '999', msg: err });
+    console.log("删除用户成功!username:", user.username);
+    res.send({ code: '000', data: result });
+  });
 });
 
 module.exports = router;
