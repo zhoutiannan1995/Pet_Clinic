@@ -12,6 +12,7 @@ router.get('/allList', Auth, async function (req, res) {
       maxPage = 0;
   if (curPage < 0) res.send({code: '999', msg: 'curPage不能小于零！'});
   let sql = `SELECT * FROM pc_db.pc_user LIMIT ${curPage} , ${pageSize}`;
+  if (req.query.pageSize == undefined || req.query.curPage == undefined) {sql = `SELECT * FROM pc_db.pc_user`}
   await connection.query('SELECT COUNT(*) FROM pc_db.pc_user', function (err, result) {
     if (err) res.send({ code: '999', msg: err});
     maxPage = Math.ceil(result[0]["COUNT(*)"] / pageSize);
@@ -23,8 +24,9 @@ router.get('/allList', Auth, async function (req, res) {
 });
 
 //按用户名查找
-router.get('/allList/:username', Auth, function (req, res) {
-  let username = req.params.username;
+router.get('/find', Auth, function (req, res) {
+  let username = req.query.username,
+      user_id = req.query.user_id;
   let sql = `SELECT * FROM pc_db.pc_user WHERE username='${username}'`;
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
@@ -62,11 +64,11 @@ router.post('/modifyUser', Auth, function (req, res) {
 //删除用户
 router.post('/delUser', Auth, function (req, res) {
   let user = req.body.data,
-    sql = `DELETE FROM pc_db.pc_user WHERE username='${user.username}'`;
+    sql = `DELETE FROM pc_db.pc_user WHERE user_id='${user.user_id}'`;
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
     else {
-      console.log("删除用户成功!username:", user.username);
+      console.log("删除用户成功!user_id:", user.user_id);
       res.send({ code: '000', data: result });
     }
   });

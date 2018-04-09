@@ -11,6 +11,7 @@ router.get('/allList', Auth, async function (req, res) {
       maxPage = 0;
   if (curPage < 0) res.send({code: '999', msg: 'curPage不能小于零！'});
   let sql = `SELECT * FROM ((SELECT * FROM pc_db.pc_diname LIMIT ${curPage} , ${pageSize}) A LEFT JOIN pc_db.pc_dikind USING (dikind_id))`;
+  if (req.query.pageSize == undefined || req.query.curPage == undefined) {sql = `SELECT * FROM (pc_db.pc_diname LEFT JOIN pc_db.pc_dikind USING (dikind_id))`}
   await connection.query('SELECT COUNT(*) FROM pc_db.pc_diname', function (err, result) {
     if (err) res.send({ code: '999', msg: err});
     maxPage = Math.ceil(result[0]["COUNT(*)"] / pageSize);
@@ -22,9 +23,10 @@ router.get('/allList', Auth, async function (req, res) {
 });
 
 //按病名查找
-router.get('/allList/:diname_name', Auth, function (req, res) {
-  let diname_name = req.params.diname_name;
-  let sql = `SELECT * FROM ((SELECT * FROM pc_db.pc_diname WHERE diname_name='${diname_name}') A LEFT JOIN pc_db.pc_dikind USING (dikind_id))`;
+router.get('/find', Auth, function (req, res) {
+  let diname_name = req.query.diname_name,
+      diname_id = req.query.diname_id;
+  let sql = diname_id ? `SELECT * FROM ((SELECT * FROM pc_db.pc_diname WHERE diname_id='${diname_id}') A LEFT JOIN pc_db.pc_dikind USING (dikind_id))` : `SELECT * FROM ((SELECT * FROM pc_db.pc_diname WHERE diname_name='${diname_name}') A LEFT JOIN pc_db.pc_dikind USING (dikind_id))`;
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
     res.send({ code: '000', data: result });
@@ -60,11 +62,11 @@ router.post('/modifyDiname', Auth, function (req, res) {
 //删除病名
 router.post('/delDiname', Auth, function (req, res) {
   let diname = req.body.data,
-    sql = `DELETE FROM pc_db.pc_diname WHERE diname_name='${diname.diname_name}'`;
+    sql = `DELETE FROM pc_db.pc_diname WHERE diname_id='${diname.diname_id}'`;
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
     else {
-      console.log("删除病名成功!diname_name:", diname.diname_name);
+      console.log("删除病名成功!diname_id:", diname.diname_id);
       res.send({ code: '000', data: result });
     }
   });

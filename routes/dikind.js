@@ -11,6 +11,7 @@ router.get('/allList', Auth, async function (req, res) {
       maxPage = 0;
   if (curPage < 0) res.send({code: '999', msg: 'curPage不能小于零！'});
   let sql = `SELECT * FROM pc_db.pc_dikind LIMIT ${curPage} , ${pageSize}`;
+  if (req.query.pageSize == undefined || req.query.curPage == undefined) {sql = `SELECT * FROM pc_db.pc_dikind`}
   await connection.query('SELECT COUNT(*) FROM pc_db.pc_dikind', function (err, result) {
     if (err) res.send({ code: '999', msg: err});
     maxPage = Math.ceil(result[0]["COUNT(*)"] / pageSize);
@@ -22,9 +23,10 @@ router.get('/allList', Auth, async function (req, res) {
 });
 
 //按病种名查找
-router.get('/allList/:dikind_name', Auth, function (req, res) {
-  let dikind_name = req.params.dikind_name;
-  let sql = `SELECT * FROM pc_db.pc_dikind WHERE dikind_name='${dikind_name}'`;
+router.get('/find', Auth, function (req, res) {
+  let dikind_name = req.query.dikind_name,
+      dikind_id = req.query.dikind_id;
+  let sql = dikind_id ? `SELECT * FROM pc_db.pc_dikind WHERE dikind_id='${dikind_id}'` : `SELECT * FROM pc_db.pc_dikind WHERE dikind_name LIKE '%${dikind_name}%'`;
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
     res.send({ code: '000', data: result });
