@@ -27,6 +27,8 @@ let users = require('./routes/users');
 let dikind = require('./routes/dikind');
 let diname = require('./routes/diname');
 let dicase = require('./routes/dicase');
+let department = require('./routes/department');
+let stay = require('./routes/stay');
 
 let app = express();
 
@@ -59,6 +61,8 @@ app.use('/users', users);
 app.use('/dikind', dikind);
 app.use('/diname', diname);
 app.use('/dicase', dicase);
+app.use('/department', department);
+app.use('/stay', stay);
 
 /// catch 404 and forward to error handler
 app.use(function (req, res, next) {

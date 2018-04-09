@@ -25,11 +25,15 @@ router.get('/allList', Auth, async function (req, res) {
 //按病名查找
 router.get('/find', Auth, function (req, res) {
   let diname_name = req.query.diname_name,
-      diname_id = req.query.diname_id;
-  let sql = diname_id ? `SELECT * FROM ((SELECT * FROM pc_db.pc_diname WHERE diname_id='${diname_id}') A LEFT JOIN pc_db.pc_dikind USING (dikind_id))` : `SELECT * FROM ((SELECT * FROM pc_db.pc_diname WHERE diname_name='${diname_name}') A LEFT JOIN pc_db.pc_dikind USING (dikind_id))`;
+      diname_id = req.query.diname_id,
+      dikind_id = req.query.dikind_id;
+  let sql = null;
+  if (diname_id) sql = `SELECT * FROM ((SELECT * FROM pc_db.pc_diname WHERE diname_id='${diname_id}') A LEFT JOIN pc_db.pc_dikind USING (dikind_id))`;
+  else if (diname_name) sql = `SELECT * FROM ((SELECT * FROM pc_db.pc_diname WHERE diname_name='${diname_name}') A LEFT JOIN pc_db.pc_dikind USING (dikind_id))`;
+  else if (dikind_id) sql = `SELECT * FROM pc_db.pc_diname WHERE dikind_id=${dikind_id}`
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
-    res.send({ code: '000', data: result });
+    res.send({ code: '000', maxPage: 1, data: result });
   });
 });
 

@@ -39,6 +39,7 @@ curl -b ./test/cookie/cookie.txt "http://localhost:5188/diname/allList"
 curl -b ./test/cookie/cookie.txt "http://localhost:5188/diname/allList?pageSize=5&curPage=0"
 curl -b ./test/cookie/cookie.txt "http://localhost:5188/diname/find?diname_name=%E8%82%BE"
 curl -b ./test/cookie/cookie.txt "http://localhost:5188/diname/find?diname_id=1"
+curl -b ./test/cookie/cookie.txt "http://localhost:5188/diname/find?dikind_id=1"
 
 # 增加病名
 curl -X POST -H "Content-Type: application/json" -d @test/json/diname.json -b ./test/cookie/cookie.txt http://localhost:5188/diname/addDiname
@@ -63,3 +64,32 @@ curl -X POST -H "Content-Type: application/json" -d @test/json/dicase.json -b ./
 
 # 删除病例
 curl -X POST -H "Content-Type: application/json" -d @test/json/dicase.json -b ./test/cookie/cookie.txt http://localhost:5188/dicase/delDicase
+
+# 查询科室
+curl -b ./test/cookie/cookie.txt "http://localhost:5188/department/allList"
+curl -b ./test/cookie/cookie.txt "http://localhost:5188/department/allList?pageSize=5&curPage=0"
+curl -b ./test/cookie/cookie.txt "http://localhost:5188/department/find?dpm_name=%E8%82%BE"
+curl -b ./test/cookie/cookie.txt "http://localhost:5188/department/find?dpm_id=1"
+
+# 增加科室
+curl -X POST -H "Content-Type: application/json" -d @test/json/department.json -b ./test/cookie/cookie.txt http://localhost:5188/department/addDepartment
+
+# 修改科室
+curl -X POST -H "Content-Type: application/json" -d @test/json/department.json -b ./test/cookie/cookie.txt http://localhost:5188/department/modifyDepartment
+
+# 删除科室
+curl -X POST -H "Content-Type: application/json" -d @test/json/department.json -b ./test/cookie/cookie.txt http://localhost:5188/department/delDepartment
+
+# 查询住院信息
+curl -b ./test/cookie/cookie.txt "http://localhost:5188/stay/allList"
+curl -b ./test/cookie/cookie.txt "http://localhost:5188/stay/allList?pageSize=5&curPage=0"
+curl -b ./test/cookie/cookie.txt "http://localhost:5188/stay/find?stay_id=1"
+
+# 增加住院信息
+curl -X POST -H "Content-Type: application/json" -d @test/json/stay.json -b ./test/cookie/cookie.txt http://localhost:5188/stay/addStay
+
+# 修改住院信息
+curl -X POST -H "Content-Type: application/json" -d @test/json/stay.json -b ./test/cookie/cookie.txt http://localhost:5188/stay/modifyStay
+
+# 删除住院信息
+curl -X POST -H "Content-Type: application/json" -d @test/json/stay.json -b ./test/cookie/cookie.txt http://localhost:5188/stay/delStay

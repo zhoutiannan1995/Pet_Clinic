@@ -29,7 +29,7 @@ router.get('/find', Auth, function (req, res) {
   let sql = dicase_id ? `SELECT * FROM ((SELECT * FROM pc_db.pc_dicase WHERE dicase_id='${dicase_id}') A LEFT JOIN pc_db.pc_diname USING (diname_id) LEFT JOIN pc_db.pc_dikind USING (dikind_id))` : `SELECT * FROM ((SELECT * FROM pc_db.pc_dicase WHERE dicase_name='${dicase_name}') A LEFT JOIN pc_db.pc_diname USING (diname_id) LEFT JOIN pc_db.pc_dikind USING (dikind_id))`;
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
-    res.send({ code: '000', data: result });
+    res.send({ code: '000', maxPage: 1, data: result });
   });
 });
 

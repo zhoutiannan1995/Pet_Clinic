@@ -29,7 +29,7 @@ router.get('/find', Auth, function (req, res) {
   let sql = dikind_id ? `SELECT * FROM pc_db.pc_dikind WHERE dikind_id='${dikind_id}'` : `SELECT * FROM pc_db.pc_dikind WHERE dikind_name LIKE '%${dikind_name}%'`;
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
-    res.send({ code: '000', data: result });
+    res.send({ code: '000', maxPage: 1, data: result });
   });
 });
 
