@@ -51,11 +51,11 @@ router.post('/addUser', Auth, function (req, res) {
 //修改用户
 router.post('/modifyUser', Auth, function (req, res) {
   let user = req.body.data,
-    sql = `UPDATE pc_db.pc_user SET password='${user.password}', authority=${user.authority} WHERE username='${user.username}'`;
+    sql = `UPDATE pc_db.pc_user SET password='${user.password}', authority=${user.authority} WHERE user_id='${user.user_id}'`;
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
     else {
-      console.log("修改用户成功!username:", user.username);
+      console.log("修改用户成功!user_id:", user.user_id);
       res.send({ code: '000', data: result });
     }
   });

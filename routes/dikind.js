@@ -49,11 +49,11 @@ router.post('/addDikind', Auth, function (req, res) {
 //修改病种
 router.post('/modifyDikind', Auth, function (req, res) {
   let dikind = req.body.data,
-    sql = `UPDATE pc_db.pc_dikind SET dikind_des='${dikind.dikind_des}' WHERE dikind_name='${dikind.dikind_name}'`;
+    sql = `UPDATE pc_db.pc_dikind SET dikind_des='${dikind.dikind_des}' WHERE dikind_id='${dikind.dikind_id}'`;
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
     else {
-      console.log("修改病种成功!dikind_name:", dikind.dikind_name);
+      console.log("修改病种成功!dikind_id:", dikind.dikind_id);
       res.send({ code: '000', data: result });
     }
   });

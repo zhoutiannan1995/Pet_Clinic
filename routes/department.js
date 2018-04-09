@@ -49,11 +49,11 @@ router.post('/addDepartment', Auth, function (req, res) {
 //修改科室
 router.post('/modifyDepartment', Auth, function (req, res) {
   let dpm = req.body.data,
-    sql = `UPDATE pc_db.pc_department SET dpm_des='${dpm.dpm_des}' WHERE dpm_name='${dpm.dpm_name}'`;
+    sql = `UPDATE pc_db.pc_department SET dpm_des='${dpm.dpm_des}' WHERE dpm_id='${dpm.dpm_id}'`;
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
     else {
-      console.log("修改科室成功!dpm_name:", dpm.dpm_name);
+      console.log("修改科室成功!dpm_id:", dpm.dpm_id);
       res.send({ code: '000', data: result });
     }
   });

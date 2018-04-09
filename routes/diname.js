@@ -53,11 +53,11 @@ router.post('/addDiname', Auth, function (req, res) {
 //修改病名
 router.post('/modifyDiname', Auth, function (req, res) {
   let diname = req.body.data,
-    sql = `UPDATE pc_db.pc_diname SET diname_des='${diname.diname_des}', dikind_id=${diname.dikind_id} WHERE diname_name='${diname.diname_name}'`;
+    sql = `UPDATE pc_db.pc_diname SET diname_des='${diname.diname_des}', dikind_id=${diname.dikind_id} WHERE diname_id='${diname.diname_id}'`;
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
     else {
-      console.log("修改病名成功!diname_name:", diname.diname_name);
+      console.log("修改病名成功!diname_id:", diname.diname_id);
       res.send({ code: '000', data: result });
     }
   });

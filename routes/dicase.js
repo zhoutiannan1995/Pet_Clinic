@@ -50,11 +50,11 @@ router.post('/addDicase', Auth, function (req, res) {
 //修改病例
 router.post('/modifyDicase', Auth, function (req, res) {
   let dicase = req.body.data,
-    sql = `UPDATE pc_db.pc_dicase SET diagnosis_des='${dicase.diagnosis_des}',diagnosis_pic='${dicase.diagnosis_pic}',diagnosis_video='${dicase.diagnosis_video}',treatment_des='${dicase.treatment_des}',diname_id=${dicase.diname_id} WHERE dicase_name='${dicase.dicase_name}'`;
+    sql = `UPDATE pc_db.pc_dicase SET diagnosis_des='${dicase.diagnosis_des}',diagnosis_pic='${dicase.diagnosis_pic}',diagnosis_video='${dicase.diagnosis_video}',treatment_des='${dicase.treatment_des}',diname_id=${dicase.diname_id} WHERE dicase_id='${dicase.dicase_id}'`;
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
     else {
-      console.log("修改病例成功!dicase_name:", dicase.dicase_name);
+      console.log("修改病例成功!dicase_id:", dicase.dicase_id);
       res.send({ code: '000', data: result });
     }
   });
