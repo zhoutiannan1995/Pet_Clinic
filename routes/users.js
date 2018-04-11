@@ -19,7 +19,7 @@ router.get('/allList', Auth, async function (req, res) {
   });
   await connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
-    res.send({ code: '000', maxPage: maxPage, data: result });
+    res.send({ code: '000', maxPage: maxPage || 1, data: result });
   });
 });
 

@@ -80,6 +80,7 @@ DROP TABLE IF EXISTS `pc_assay`;
 CREATE TABLE `pc_assay` (
   `assay_id` int(11) NOT NULL AUTO_INCREMENT,
   `assay_name` varchar(255) NOT NULL,
+  `assay_des` varchar(255) NOT NULL,
   PRIMARY KEY (`assay_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 

@@ -29,6 +29,10 @@ let diname = require('./routes/diname');
 let dicase = require('./routes/dicase');
 let department = require('./routes/department');
 let stay = require('./routes/stay');
+let medicine = require('./routes/medicine');
+let pay = require('./routes/pay');
+let assay = require('./routes/assay');
+let test = require('./routes/test');
 
 let app = express();
 
@@ -63,6 +67,10 @@ app.use('/diname', diname);
 app.use('/dicase', dicase);
 app.use('/department', department);
 app.use('/stay', stay);
+app.use('/medicine', medicine);
+app.use('/pay', pay);
+app.use('/assay', assay);
+app.use('/test', test);
 
 /// catch 404 and forward to error handler
 app.use(function (req, res, next) {
