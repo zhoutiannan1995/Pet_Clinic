@@ -6,7 +6,7 @@ curl -b ./test/cookie/cookie.txt http://localhost:5188/logout
 
 ##---------------------------------------------------------------------------------------------
 # 查询用户
-curl -b ./test/cookie/cookie.txt "http://localhost:5188/users/allList
+curl -b ./test/cookie/cookie.txt "http://localhost:5188/users/allList"
 curl -b ./test/cookie/cookie.txt "http://localhost:5188/users/allList?pageSize=5&curPage=0"
 curl -b ./test/cookie/cookie.txt "http://localhost:5188/users/find?user_id=1"
 curl -b ./test/cookie/cookie.txt "http://localhost:5188/users/find?user_name=xiaoming"
