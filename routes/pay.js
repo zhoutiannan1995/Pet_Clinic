@@ -10,9 +10,9 @@ router.get('/allList', Auth, async function (req, res) {
       curPage = req.query.curPage * pageSize,
       maxPage = 0;
   if (curPage < 0) {res.send({code: '999', msg: 'curPage不能小于零！'});return;}
-  let sql = `SELECT * FROM pc_db.pc_pay LIMIT ${curPage} , ${pageSize}`;
-  if (req.query.pageSize == undefined || req.query.curPage == undefined) {sql = `SELECT * FROM pc_db.pc_pay`}
-  await connection.query('SELECT COUNT(*) FROM pc_db.pc_pay', function (err, result) {
+  let sql = `SELECT * FROM pcdb.pc_pay LIMIT ${curPage} , ${pageSize}`;
+  if (req.query.pageSize == undefined || req.query.curPage == undefined) {sql = `SELECT * FROM pcdb.pc_pay`}
+  await connection.query('SELECT COUNT(*) FROM pcdb.pc_pay', function (err, result) {
     if (err) res.send({ code: '999', msg: err});
     maxPage = Math.ceil(result[0]["COUNT(*)"] / pageSize);
   });
@@ -26,7 +26,7 @@ router.get('/allList', Auth, async function (req, res) {
 router.get('/find', Auth, function (req, res) {
   let pay_name = req.query.pay_name,
       pay_id = req.query.pay_id;
-  let sql = pay_id ? `SELECT * FROM pc_db.pc_pay WHERE pay_id='${pay_id}'` : `SELECT * FROM pc_db.pc_pay WHERE pay_name LIKE '%${pay_name}%'`;
+  let sql = pay_id ? `SELECT * FROM pcdb.pc_pay WHERE pay_id='${pay_id}'` : `SELECT * FROM pcdb.pc_pay WHERE pay_name LIKE '%${pay_name}%'`;
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
     res.send({ code: '000', maxPage: 1, data: result });
@@ -36,7 +36,7 @@ router.get('/find', Auth, function (req, res) {
 //增加收费
 router.post('/addpay', Auth, function (req, res) {
   let pay = req.body.data;
-  let sql = `INSERT INTO pc_db.pc_pay (pay_name, pay_amount) VALUES ('${pay.pay_name}','${pay.pay_amount}')`;
+  let sql = `INSERT INTO pcdb.pc_pay (pay_name, pay_amount) VALUES ('${pay.pay_name}','${pay.pay_amount}')`;
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
     else {
@@ -49,7 +49,7 @@ router.post('/addpay', Auth, function (req, res) {
 //修改收费
 router.post('/modifypay', Auth, function (req, res) {
   let pay = req.body.data,
-    sql = `UPDATE pc_db.pc_pay SET pay_amount='${pay.pay_amount}' WHERE pay_id='${pay.pay_id}'`;
+    sql = `UPDATE pcdb.pc_pay SET pay_amount='${pay.pay_amount}' WHERE pay_id='${pay.pay_id}'`;
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
     else {
@@ -62,7 +62,7 @@ router.post('/modifypay', Auth, function (req, res) {
 //删除收费
 router.post('/delpay', Auth, function (req, res) {
   let pay = req.body.data,
-    sql = `DELETE FROM pc_db.pc_pay WHERE pay_id=${pay.pay_id}`;
+    sql = `DELETE FROM pcdb.pc_pay WHERE pay_id=${pay.pay_id}`;
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
     else {

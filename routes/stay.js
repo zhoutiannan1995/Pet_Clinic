@@ -11,9 +11,9 @@ router.get('/allList', Auth, async function (req, res) {
       curPage = req.query.curPage * pageSize,
       maxPage = 0;
   if (curPage < 0) res.send({code: '999', msg: 'curPage不能小于零！'});
-  let sql = `SELECT * FROM pc_db.pc_stay LIMIT ${curPage} , ${pageSize}`;
-  if (req.query.pageSize == undefined || req.query.curPage == undefined) {sql = `SELECT * FROM pc_db.pc_stay`}
-  await connection.query('SELECT COUNT(*) FROM pc_db.pc_stay', function (err, result) {
+  let sql = `SELECT * FROM pcdb.pc_stay LIMIT ${curPage} , ${pageSize}`;
+  if (req.query.pageSize == undefined || req.query.curPage == undefined) {sql = `SELECT * FROM pcdb.pc_stay`}
+  await connection.query('SELECT COUNT(*) FROM pcdb.pc_stay', function (err, result) {
     if (err) res.send({ code: '999', msg: err});
     maxPage = Math.ceil(result[0]["COUNT(*)"] / pageSize);
   });
@@ -26,7 +26,7 @@ router.get('/allList', Auth, async function (req, res) {
 //按住院信息名查找
 router.get('/find', Auth, function (req, res) {
   let stay_id = req.query.stay_id;
-  let sql = `SELECT * FROM pc_db.pc_stay WHERE stay_id='${stay_id}'`;
+  let sql = `SELECT * FROM pcdb.pc_stay WHERE stay_id='${stay_id}'`;
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
     res.send({ code: '000', maxPage: 1, data: result });
@@ -36,7 +36,7 @@ router.get('/find', Auth, function (req, res) {
 //增加住院信息
 router.post('/addStay', Auth, function (req, res) {
   let stayData = req.body.data;
-  let sql = `INSERT INTO pc_db.pc_stay (patient_name, stay_starttime, stay_endtime) VALUES ('${stayData.patient_name}','${moment(stayData.stay_starttime).format("YYYY-MM-DD")}','${moment(stayData.stay_endtime).format("YYYY-MM-DD")}')`;
+  let sql = `INSERT INTO pcdb.pc_stay (patient_name, stay_starttime, stay_endtime) VALUES ('${stayData.patient_name}','${moment(stayData.stay_starttime).format("YYYY-MM-DD")}','${moment(stayData.stay_endtime).format("YYYY-MM-DD")}')`;
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
     else {
@@ -49,7 +49,7 @@ router.post('/addStay', Auth, function (req, res) {
 //修改住院信息
 router.post('/modifyStay', Auth, function (req, res) {
   let stayData = req.body.data,
-    sql = `UPDATE pc_db.pc_stay SET patient_name='${stayData.patient_name}',stay_starttime='${moment(stayData.stay_starttime).format("YYYY-MM-DD")}',stay_endtime='${moment(stayData.stay_endtime).format("YYYY-MM-DD")}' WHERE stay_id='${stayData.stay_id}'`;
+    sql = `UPDATE pcdb.pc_stay SET patient_name='${stayData.patient_name}',stay_starttime='${moment(stayData.stay_starttime).format("YYYY-MM-DD")}',stay_endtime='${moment(stayData.stay_endtime).format("YYYY-MM-DD")}' WHERE stay_id='${stayData.stay_id}'`;
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
     else {
@@ -62,7 +62,7 @@ router.post('/modifyStay', Auth, function (req, res) {
 //删除住院信息
 router.post('/delStay', Auth, function (req, res) {
   let stayData = req.body.data,
-    sql = `DELETE FROM pc_db.pc_stay WHERE stay_id=${stayData.stay_id}`;
+    sql = `DELETE FROM pcdb.pc_stay WHERE stay_id=${stayData.stay_id}`;
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
     else {

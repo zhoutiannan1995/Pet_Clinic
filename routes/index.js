@@ -13,7 +13,7 @@ router.get('/', function (req, res) {
 //登录
 router.post('/login', function (req, res) {
   let login = req.body.data;
-  let sql = `SELECT * FROM pc_db.pc_user WHERE username = '${login.username}' AND password = '${login.password}'`;
+  let sql = `SELECT * FROM pcdb.pc_user WHERE username = '${login.username}' AND password = '${login.password}'`;
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
     if (result.length == 0) { res.send({ code: '999', msg: '用户名或密码错误' }); }

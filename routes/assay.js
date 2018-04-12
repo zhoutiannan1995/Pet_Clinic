@@ -10,9 +10,9 @@ router.get('/allList', Auth, async function (req, res) {
       curPage = req.query.curPage * pageSize,
       maxPage = 0;
   if (curPage < 0) {res.send({code: '999', msg: 'curPage不能小于零！'});return;}
-  let sql = `SELECT * FROM pc_db.pc_assay LIMIT ${curPage} , ${pageSize}`;
-  if (req.query.pageSize == undefined || req.query.curPage == undefined) {sql = `SELECT * FROM pc_db.pc_assay`}
-  await connection.query('SELECT COUNT(*) FROM pc_db.pc_assay', function (err, result) {
+  let sql = `SELECT * FROM pcdb.pc_assay LIMIT ${curPage} , ${pageSize}`;
+  if (req.query.pageSize == undefined || req.query.curPage == undefined) {sql = `SELECT * FROM pcdb.pc_assay`}
+  await connection.query('SELECT COUNT(*) FROM pcdb.pc_assay', function (err, result) {
     if (err) res.send({ code: '999', msg: err});
     maxPage = Math.ceil(result[0]["COUNT(*)"] / pageSize);
   });
@@ -26,7 +26,7 @@ router.get('/allList', Auth, async function (req, res) {
 router.get('/find', Auth, function (req, res) {
   let assay_name = req.query.assay_name,
       assay_id = req.query.assay_id;
-  let sql = assay_id ? `SELECT * FROM pc_db.pc_assay WHERE assay_id='${assay_id}'` : `SELECT * FROM pc_db.pc_assay WHERE assay_name LIKE '%${assay_name}%'`;
+  let sql = assay_id ? `SELECT * FROM pcdb.pc_assay WHERE assay_id='${assay_id}'` : `SELECT * FROM pcdb.pc_assay WHERE assay_name LIKE '%${assay_name}%'`;
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
     res.send({ code: '000', maxPage: 1, data: result });
@@ -36,7 +36,7 @@ router.get('/find', Auth, function (req, res) {
 //增加化验
 router.post('/addAssay', Auth, function (req, res) {
   let assay = req.body.data;
-  let sql = `INSERT INTO pc_db.pc_assay (assay_name, assay_des) VALUES ('${assay.assay_name}','${assay.assay_des}')`;
+  let sql = `INSERT INTO pcdb.pc_assay (assay_name, assay_des) VALUES ('${assay.assay_name}','${assay.assay_des}')`;
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
     else {
@@ -49,7 +49,7 @@ router.post('/addAssay', Auth, function (req, res) {
 //修改化验
 router.post('/modifyAssay', Auth, function (req, res) {
   let assay = req.body.data,
-    sql = `UPDATE pc_db.pc_assay SET assay_des='${assay.assay_des}' WHERE assay_id='${assay.assay_id}'`;
+    sql = `UPDATE pcdb.pc_assay SET assay_des='${assay.assay_des}' WHERE assay_id='${assay.assay_id}'`;
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
     else {
@@ -62,7 +62,7 @@ router.post('/modifyAssay', Auth, function (req, res) {
 //删除化验
 router.post('/delAssay', Auth, function (req, res) {
   let assay = req.body.data,
-    sql = `DELETE FROM pc_db.pc_assay WHERE assay_id=${assay.assay_id}`;
+    sql = `DELETE FROM pcdb.pc_assay WHERE assay_id=${assay.assay_id}`;
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
     else {

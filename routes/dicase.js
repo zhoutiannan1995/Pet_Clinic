@@ -10,9 +10,9 @@ router.get('/allList', Auth, async function (req, res) {
       curPage = req.query.curPage * pageSize,
       maxPage = 0;
   if (curPage < 0) res.send({code: '999', msg: 'curPage不能小于零！'});
-  let sql = `SELECT * FROM ((SELECT * FROM pc_db.pc_dicase LIMIT ${curPage} , ${pageSize}) A LEFT JOIN pc_db.pc_diname USING (diname_id) LEFT JOIN pc_db.pc_dikind USING (dikind_id))`;
-  if (req.query.pageSize == undefined || req.query.curPage == undefined) {sql = `SELECT * FROM pc_db.pc_dikind`}
-  await connection.query('SELECT COUNT(*) FROM pc_db.pc_dicase', function (err, result) {
+  let sql = `SELECT * FROM ((SELECT * FROM pcdb.pc_dicase LIMIT ${curPage} , ${pageSize}) A LEFT JOIN pcdb.pc_diname USING (diname_id) LEFT JOIN pcdb.pc_dikind USING (dikind_id))`;
+  if (req.query.pageSize == undefined || req.query.curPage == undefined) {sql = `SELECT * FROM pcdb.pc_dikind`}
+  await connection.query('SELECT COUNT(*) FROM pcdb.pc_dicase', function (err, result) {
     if (err) res.send({ code: '999', msg: err});
     maxPage = Math.ceil(result[0]["COUNT(*)"] / pageSize);
   });
@@ -26,7 +26,7 @@ router.get('/allList', Auth, async function (req, res) {
 router.get('/find', Auth, function (req, res) {
   let dicase_name = req.query.dicase_name,
       dicase_id = req.query.dicase_id;
-  let sql = dicase_id ? `SELECT * FROM ((SELECT * FROM pc_db.pc_dicase WHERE dicase_id='${dicase_id}') A LEFT JOIN pc_db.pc_diname USING (diname_id) LEFT JOIN pc_db.pc_dikind USING (dikind_id))` : `SELECT * FROM ((SELECT * FROM pc_db.pc_dicase WHERE dicase_name='${dicase_name}') A LEFT JOIN pc_db.pc_diname USING (diname_id) LEFT JOIN pc_db.pc_dikind USING (dikind_id))`;
+  let sql = dicase_id ? `SELECT * FROM ((SELECT * FROM pcdb.pc_dicase WHERE dicase_id='${dicase_id}') A LEFT JOIN pcdb.pc_diname USING (diname_id) LEFT JOIN pcdb.pc_dikind USING (dikind_id))` : `SELECT * FROM ((SELECT * FROM pcdb.pc_dicase WHERE dicase_name='${dicase_name}') A LEFT JOIN pcdb.pc_diname USING (diname_id) LEFT JOIN pcdb.pc_dikind USING (dikind_id))`;
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
     res.send({ code: '000', maxPage: 1, data: result });
@@ -36,7 +36,7 @@ router.get('/find', Auth, function (req, res) {
 //增加病例
 router.post('/addDicase', Auth, function (req, res) {
   let dicase = req.body.data;
-  let sql = `INSERT INTO pc_db.pc_dicase (dicase_name, diagnosis_des, diagnosis_pic, diagnosis_video, treatment_des, diname_id) VALUES \
+  let sql = `INSERT INTO pcdb.pc_dicase (dicase_name, diagnosis_des, diagnosis_pic, diagnosis_video, treatment_des, diname_id) VALUES \
             ('${dicase.dicase_name}', '${dicase.diagnosis_des}', '${dicase.diagnosis_pic}', '${dicase.diagnosis_video}', '${dicase.treatment_des}', ${dicase.diname_id})`;
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
@@ -50,7 +50,7 @@ router.post('/addDicase', Auth, function (req, res) {
 //修改病例
 router.post('/modifyDicase', Auth, function (req, res) {
   let dicase = req.body.data,
-    sql = `UPDATE pc_db.pc_dicase SET diagnosis_des='${dicase.diagnosis_des}',diagnosis_pic='${dicase.diagnosis_pic}',diagnosis_video='${dicase.diagnosis_video}',treatment_des='${dicase.treatment_des}',diname_id=${dicase.diname_id} WHERE dicase_id='${dicase.dicase_id}'`;
+    sql = `UPDATE pcdb.pc_dicase SET diagnosis_des='${dicase.diagnosis_des}',diagnosis_pic='${dicase.diagnosis_pic}',diagnosis_video='${dicase.diagnosis_video}',treatment_des='${dicase.treatment_des}',diname_id=${dicase.diname_id} WHERE dicase_id='${dicase.dicase_id}'`;
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
     else {
@@ -63,7 +63,7 @@ router.post('/modifyDicase', Auth, function (req, res) {
 //删除病例
 router.post('/delDicase', Auth, function (req, res) {
   let dicase = req.body.data,
-    sql = `DELETE FROM pc_db.pc_dicase WHERE dicase_id='${dicase.dicase_id}'`;
+    sql = `DELETE FROM pcdb.pc_dicase WHERE dicase_id='${dicase.dicase_id}'`;
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
     else {

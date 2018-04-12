@@ -10,9 +10,9 @@ router.get('/allList', Auth, async function (req, res) {
       curPage = req.query.curPage * pageSize,
       maxPage = 0;
   if (curPage < 0) {res.send({code: '999', msg: 'curPage不能小于零！'});return;}
-  let sql = `SELECT * FROM pc_db.pc_medicine LIMIT ${curPage} , ${pageSize}`;
-  if (req.query.pageSize == undefined || req.query.curPage == undefined) {sql = `SELECT * FROM pc_db.pc_medicine`}
-  await connection.query('SELECT COUNT(*) FROM pc_db.pc_medicine', function (err, result) {
+  let sql = `SELECT * FROM pcdb.pc_medicine LIMIT ${curPage} , ${pageSize}`;
+  if (req.query.pageSize == undefined || req.query.curPage == undefined) {sql = `SELECT * FROM pcdb.pc_medicine`}
+  await connection.query('SELECT COUNT(*) FROM pcdb.pc_medicine', function (err, result) {
     if (err) res.send({ code: '999', msg: err});
     maxPage = Math.ceil(result[0]["COUNT(*)"] / pageSize);
   });
@@ -26,7 +26,7 @@ router.get('/allList', Auth, async function (req, res) {
 router.get('/find', Auth, function (req, res) {
   let medicine_name = req.query.medicine_name,
       medicine_id = req.query.medicine_id;
-  let sql = medicine_id ? `SELECT * FROM pc_db.pc_medicine WHERE medicine_id='${medicine_id}'` : `SELECT * FROM pc_db.pc_medicine WHERE medicine_name LIKE '%${medicine_name}%'`;
+  let sql = medicine_id ? `SELECT * FROM pcdb.pc_medicine WHERE medicine_id='${medicine_id}'` : `SELECT * FROM pcdb.pc_medicine WHERE medicine_name LIKE '%${medicine_name}%'`;
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
     res.send({ code: '000', maxPage: 1, data: result });
@@ -36,7 +36,7 @@ router.get('/find', Auth, function (req, res) {
 //增加药品
 router.post('/addMedicine', Auth, function (req, res) {
   let medicine = req.body.data;
-  let sql = `INSERT INTO pc_db.pc_medicine (medicine_name, medicine_des) VALUES ('${medicine.medicine_name}','${medicine.medicine_des}')`;
+  let sql = `INSERT INTO pcdb.pc_medicine (medicine_name, medicine_des) VALUES ('${medicine.medicine_name}','${medicine.medicine_des}')`;
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
     else {
@@ -49,7 +49,7 @@ router.post('/addMedicine', Auth, function (req, res) {
 //修改药品
 router.post('/modifyMedicine', Auth, function (req, res) {
   let medicine = req.body.data,
-    sql = `UPDATE pc_db.pc_medicine SET medicine_des='${medicine.medicine_des}' WHERE medicine_id='${medicine.medicine_id}'`;
+    sql = `UPDATE pcdb.pc_medicine SET medicine_des='${medicine.medicine_des}' WHERE medicine_id='${medicine.medicine_id}'`;
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
     else {
@@ -62,7 +62,7 @@ router.post('/modifyMedicine', Auth, function (req, res) {
 //删除药品
 router.post('/delMedicine', Auth, function (req, res) {
   let medicine = req.body.data,
-    sql = `DELETE FROM pc_db.pc_medicine WHERE medicine_id=${medicine.medicine_id}`;
+    sql = `DELETE FROM pcdb.pc_medicine WHERE medicine_id=${medicine.medicine_id}`;
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
     else {
