@@ -27,7 +27,7 @@ router.get('/allList', Auth, async function (req, res) {
 router.get('/find', Auth, function (req, res) {
   let username = req.query.username,
       user_id = req.query.user_id;
-  let sql = `SELECT * FROM pcdb.pc_user WHERE username='${username}'`;
+  let sql = username ? `SELECT * FROM pcdb.pc_user WHERE username='${username}'` : `SELECT * FROM pcdb.pc_user WHERE user_id='${user_id}'`;
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
     res.send({ code: '000', maxPage: 1, data: result });

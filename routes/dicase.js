@@ -1,6 +1,6 @@
 let express = require('express');
 let multer  = require('multer');
-
+let fs = require('fs');
 let connection = require('../db/connection');
 let Auth = require('../lib/Auth');
 
@@ -37,42 +37,49 @@ router.get('/find', Auth, function (req, res) {
 });
 
 //增加病例
-router.post('/addDicase', Auth, function (req, res) {
-  let dicase = req.body.data;
+router.post('/addDicase', Auth, upload.fields([{name:'file'},{name:'video'}]), function (req, res) {
+//upload.fields([{name:'file'},{name:'text'}]), function (req, res) {
+  console.log("filerewrwrewrewrewre",req.files.file[0]);
+  console.log("filerewrwrewrewrewre",req.files.video[0]);
+  console.log("body888888e4239493294929924",req.body);
+  let dicase = req.body;
+  let arr = req.files.file[0].originalname.split('.');
+  let newPicName = dicase.dicase_name + '.' + arr[arr.length-1];
+      arr = req.files.video[0].originalname.split('.');
+  let newVidName = dicase.dicase_name + '.' + arr[arr.length-1];
+  console.log(newPicName);
   let sql = `INSERT INTO pcdb.pc_dicase (dicase_name, diagnosis_des, diagnosis_pic, diagnosis_video, treatment_des, diname_id) VALUES \
-            ('${dicase.dicase_name}', '${dicase.diagnosis_des}', '${dicase.diagnosis_pic}', '${dicase.diagnosis_video}', '${dicase.treatment_des}', ${dicase.diname_id})`;
+            ('${dicase.dicase_name}', '${dicase.diagnosis_des}', '${newPicName}', '${newVidName}', '${dicase.treatment_des}', ${dicase.diname_id})`;
+
+  let tmp_path = req.files.file[0].path;
+  let tmp_path2 = req.files.video[0].path;
+  let target_path = 'public/images/' + newPicName;
+  let target_path2 = 'public/videos/' + newVidName;
   connection.query(sql, function (err, result) {
     if (err) res.send({ code: '999', msg: err });
     else {
-      console.log("增加病例成功!dicase_name:", dicase.dicase_name);
-      res.send({ code: '000', data: result });
+      let src = fs.createReadStream(tmp_path);
+      let dest = fs.createWriteStream(target_path);
+      src.pipe(dest);
+      src.on('end', function() {
+        let src = fs.createReadStream(tmp_path2);
+        let dest = fs.createWriteStream(target_path2);
+        src.pipe(dest);
+        src.on('end', function() {
+          console.log("增加病例成功!dicase_name:", dicase.dicase_name);
+          res.send({ code: '000', data: result }); 
+        });
+        src.on('error', function(err) {
+          res.send({ code: '999', msg: '视频保存失败！'}); 
+        });
+      });
+      src.on('error', function(err) {
+        res.send({ code: '999', msg: '图像保存失败！'}); 
+      });
     }
   });
+  res.send({code:'000', msg:'成功'});
 });
-// router.post('/addDicase', Auth, upload.fields([{name:'file'},{name:'text'}]), function (req, res) {
-//   console.log(req);
-//   let dicase = req.body.text;
-//   let sql = `INSERT INTO pcdb.pc_dicase (dicase_name, diagnosis_des, diagnosis_pic, diagnosis_video, treatment_des, diname_id) VALUES \
-//             ('${dicase.dicase_name}', '${dicase.diagnosis_des}', '${dicase.diagnosis_pic}', '${dicase.diagnosis_video}', '${dicase.treatment_des}', ${dicase.diname_id})`;
-
-//   let tmp_path = req.files.file[0].path;
-//   let target_path = 'public/images/' + req.files.file[0].originalname;
-//   connection.query(sql, function (err, result) {
-//     if (err) res.send({ code: '999', msg: err });
-//     else {
-//       let src = fs.createReadStream(tmp_path);
-//       let dest = fs.createWriteStream(target_path);
-//       src.pipe(dest);
-//       src.on('end', function() {
-//         console.log("增加病例成功!dicase_name:", dicase.dicase_name);
-//         res.send({ code: '000', data: result }); 
-//       });
-//       src.on('error', function(err) {
-//         res.send({ code: '999', msg: '图像保存失败！'}); 
-//       });
-//     }
-//   });
-// });
 
 //修改病例
 router.post('/modifyDicase', Auth, function (req, res) {
@@ -86,7 +93,6 @@ router.post('/modifyDicase', Auth, function (req, res) {
     }
   });
 });
-
 //删除病例
 router.post('/delDicase', Auth, function (req, res) {
   let dicase = req.body.data,
