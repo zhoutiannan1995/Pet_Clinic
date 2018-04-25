@@ -154,21 +154,21 @@ router.post('/delDicase', Auth, function (req, res) {
 });
 
 function del(name){
-  fs.readdir('../public/images', function (error, files){
+  fs.readdir('/var/www/Pet_Clinic/public/images', function (error, files){
     if (error) throw error;
     var cc = files.filter(function (fileName){
       let reg = new RegExp(name+'.');
       return reg.test(fileName);
     })[0];
-    fs.unlinkSync('../public/images/'+cc);
+    fs.unlinkSync('/var/www/Pet_Clinic/public/images/'+cc);
   });
-  fs.readdir('../public/videos', function (error, files){
+  fs.readdir('/var/www/Pet_Clinic/public／videos', function (error, files){
     if (error) throw error;
     var cc = files.filter(function (fileName){
       let reg = new RegExp(name+'.');
       return reg.test(fileName);
     })[0];
-    fs.unlinkSync('../public/videos/'+cc);
+    fs.unlinkSync('/var/www/Pet_Clinic/public/videos/'+cc);
   });
 }
 
