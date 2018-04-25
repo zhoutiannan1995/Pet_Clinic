@@ -162,7 +162,7 @@ function del(name){
     })[0];
     fs.unlinkSync('/var/www/Pet_Clinic/public/images/'+cc);
   });
-  fs.readdir('/var/www/Pet_Clinic/public／videos', function (error, files){
+  fs.readdir('/var/www/Pet_Clinic/public/videos', function (error, files){
     if (error) throw error;
     var cc = files.filter(function (fileName){
       let reg = new RegExp(name+'.');
