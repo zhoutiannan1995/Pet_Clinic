@@ -94,14 +94,14 @@ router.post('/addDicase', Auth, upload.fields([{name:'file'},{name:'video'}]), f
 //   });
 // });
 //修改病例
-router.post('/modifyDicase', Auth, upload.fields([{name:'file'},{name:'video'}]), function (req, res) {
+router.post('/modifyDicase', Auth, upload.fields([{name:'file'},{name:'video'}]), async function (req, res) {
   //upload.fields([{name:'file'},{name:'text'}]), function (req, res) {
     console.log("filerewrwrewrewrewre",req.files.file[0]);
     console.log("filerewrwrewrewrewre",req.files.video[0]);
     console.log("body888888e4239493294929924",req.body);
     let dicase = req.body;
     //删除已有图像视频文件
-    del(dicase.dicase_name);
+    await del(dicase.dicase_name);
     let arr = req.files.file[0].originalname.split('.');
     let newPicName = dicase.dicase_name + '.' + arr[arr.length-1];
         arr = req.files.video[0].originalname.split('.');
@@ -113,7 +113,7 @@ router.post('/modifyDicase', Auth, upload.fields([{name:'file'},{name:'video'}])
     let tmp_path2 = req.files.video[0].path;
     let target_path = 'public/images/' + newPicName;
     let target_path2 = 'public/videos/' + newVidName;
-    connection.query(sql, function (err, result) {
+    await connection.query(sql, function (err, result) {
       if (err) res.send({ code: '999', msg: err });
       else {
         let src = fs.createReadStream(tmp_path);
