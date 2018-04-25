@@ -130,7 +130,7 @@ router.post('/modifyDicase', Auth, upload.fields([{name:'file'},{name:'video'}])
           let target_path = 'public/images/' + newPicName;
           await writeFile(tmp_path,target_path);
         }
-        if (req.files.file) {
+        if (req.files.video) {
           let tmp_path2 = req.files.video[0].path;
           let target_path2 = 'public/videos/' + newVidName;
           await writeFile(tmp_path2,target_path2);
