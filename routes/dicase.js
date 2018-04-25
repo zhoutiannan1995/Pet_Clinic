@@ -99,8 +99,8 @@ router.post('/addDicase', Auth, upload.fields([{name:'file'},{name:'video'}]), f
 //修改病例
 router.post('/modifyDicase', Auth, upload.fields([{name:'file'},{name:'video'}]), async function (req, res) {
   //upload.fields([{name:'file'},{name:'text'}]), function (req, res) {
-    console.log("filerewrwrewrewrewre",req.files.file[0]);
-    console.log("filerewrwrewrewrewre",req.files.video[0]);
+    //console.log("filerewrwrewrewrewre",req.files.file[0]);
+    //console.log("filerewrwrewrewrewre",req.files.video[0]);
     console.log("body888888e4239493294929924",req.body);
     let dicase = req.body, arr =null, newPicName=null, newVidName=null,sql1='',sql2='';
     if (req.files.file) {
