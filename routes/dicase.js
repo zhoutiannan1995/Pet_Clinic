@@ -39,6 +39,9 @@ router.get('/find', Auth, function (req, res) {
 //增加病例
 router.post('/addDicase', Auth, upload.fields([{name:'file'},{name:'video'}]), function (req, res) {
 //upload.fields([{name:'file'},{name:'text'}]), function (req, res) {
+  if (!req.files.file || !req.files.video) {
+    res.send({ code: '999', msg: "图像或视频不能为空！" });
+  }
   console.log("filerewrwrewrewrewre",req.files.file[0]);
   console.log("filerewrwrewrewrewre",req.files.video[0]);
   console.log("body888888e4239493294929924",req.body);
@@ -99,15 +102,21 @@ router.post('/modifyDicase', Auth, upload.fields([{name:'file'},{name:'video'}])
     console.log("filerewrwrewrewrewre",req.files.file[0]);
     console.log("filerewrwrewrewrewre",req.files.video[0]);
     console.log("body888888e4239493294929924",req.body);
-    let dicase = req.body;
-    //删除已有图像视频文件
-    await del(dicase.dicase_name);
-    let arr = req.files.file[0].originalname.split('.');
-    let newPicName = dicase.dicase_name + '.' + arr[arr.length-1];
-        arr = req.files.video[0].originalname.split('.');
-    let newVidName = dicase.dicase_name + '.' + arr[arr.length-1];
-    console.log(newPicName);
-    let sql = `UPDATE pcdb.pc_dicase SET diagnosis_des='${dicase.diagnosis_des}',diagnosis_pic='${newPicName}',diagnosis_video='${newVidName}',treatment_des='${dicase.treatment_des}',diname_id=${dicase.diname_id} WHERE dicase_id='${dicase.dicase_id}'`;
+    let dicase = req.body, arr =null, newPicName=null, newVidName=null,sql1='',sql2='';
+    if (req.files.file) {
+      arr = req.files.file[0].originalname.split('.');
+      newPicName = dicase.dicase_name + '.' + arr[arr.length-1];
+      sql1 = `diagnosis_pic='${newPicName}',`;
+      await delPic(dicase.dicase_name);
+    }
+    if (req.files.video) {
+      arr = req.files.video[0].originalname.split('.');
+      newVidName = dicase.dicase_name + '.' + arr[arr.length-1];
+      sql2 = `diagnosis_video='${newVidName}',`;
+      await delVid(dicase.dicase_name);
+    }
+
+    let sql = `UPDATE pcdb.pc_dicase SET diagnosis_des='${dicase.diagnosis_des}',` +sql1 + sql2 + `treatment_des='${dicase.treatment_des}',diname_id=${dicase.diname_id} WHERE dicase_id='${dicase.dicase_id}'`;
   
     let tmp_path = req.files.file[0].path;
     let tmp_path2 = req.files.video[0].path;
@@ -155,7 +164,7 @@ router.post('/delDicase', Auth, function (req, res) {
 
 function del(name){
   fs.readdir('/var/www/Pet_Clinic/public/images', function (error, files){
-    if (error) throw error;
+    if (error) console.log(error);
     var cc = files.filter(function (fileName){
       let reg = new RegExp(name+'.');
       return reg.test(fileName);
@@ -163,7 +172,7 @@ function del(name){
     fs.unlinkSync('/var/www/Pet_Clinic/public/images/'+cc);
   });
   fs.readdir('/var/www/Pet_Clinic/public/videos', function (error, files){
-    if (error) throw error;
+    if (error) console.log(error);
     var cc = files.filter(function (fileName){
       let reg = new RegExp(name+'.');
       return reg.test(fileName);
@@ -171,6 +180,25 @@ function del(name){
     fs.unlinkSync('/var/www/Pet_Clinic/public/videos/'+cc);
   });
 }
-
+function delPic(name){
+  fs.readdir('/var/www/Pet_Clinic/public/images', function (error, files){
+    if (error) console.log(error);
+    var cc = files.filter(function (fileName){
+      let reg = new RegExp(name+'.');
+      return reg.test(fileName);
+    })[0];
+    fs.unlinkSync('/var/www/Pet_Clinic/public/images/'+cc);
+  });
+}
+function delVid(name){
+  fs.readdir('/var/www/Pet_Clinic/public/videos', function (error, files){
+    if (error) console.log(error);
+    var cc = files.filter(function (fileName){
+      let reg = new RegExp(name+'.');
+      return reg.test(fileName);
+    })[0];
+    fs.unlinkSync('/var/www/Pet_Clinic/public/videos/'+cc);
+  });
+}
 
 module.exports = router;
