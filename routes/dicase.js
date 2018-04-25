@@ -118,31 +118,24 @@ router.post('/modifyDicase', Auth, upload.fields([{name:'file'},{name:'video'}])
 
     let sql = `UPDATE pcdb.pc_dicase SET diagnosis_des='${dicase.diagnosis_des}',` +sql1 + sql2 + `treatment_des='${dicase.treatment_des}',diname_id=${dicase.diname_id} WHERE dicase_id='${dicase.dicase_id}'`;
   
-    let tmp_path = req.files.file[0].path;
-    let tmp_path2 = req.files.video[0].path;
-    let target_path = 'public/images/' + newPicName;
-    let target_path2 = 'public/videos/' + newVidName;
-    await connection.query(sql, function (err, result) {
+    // let tmp_path = req.files.file[0].path;
+    // let tmp_path2 = req.files.video[0].path;
+    // let target_path = 'public/images/' + newPicName;
+    // let target_path2 = 'public/videos/' + newVidName;
+    await connection.query(sql, async function (err, result) {
       if (err) res.send({ code: '999', msg: err });
       else {
-        let src = fs.createReadStream(tmp_path);
-        let dest = fs.createWriteStream(target_path);
-        src.pipe(dest);
-        src.on('end', function() {
-          let src = fs.createReadStream(tmp_path2);
-          let dest = fs.createWriteStream(target_path2);
-          src.pipe(dest);
-          src.on('end', function() {
-            console.log("修改病例成功!dicase_name:", dicase.dicase_name);
-            res.send({ code: '000', data: result }); 
-          });
-          src.on('error', function(err) {
-            res.send({ code: '999', msg: '视频保存失败！'}); 
-          });
-        });
-        src.on('error', function(err) {
-          res.send({ code: '999', msg: '图像保存失败！'}); 
-        });
+        if (req.files.file) {
+          let tmp_path = req.files.file[0].path;
+          let target_path = 'public/images/' + newPicName;
+          await writeFile(tmp_path,target_path);
+        }
+        if (req.files.file) {
+          let tmp_path2 = req.files.video[0].path;
+          let target_path2 = 'public/videos/' + newVidName;
+          await writeFile(tmp_path2,target_path2);
+        }
+        console.log("修改病例成功!dicase_name:", dicase.dicase_name);
       }
     });
     res.send({code:'000', msg:'成功'});
@@ -198,6 +191,17 @@ function delVid(name){
       return reg.test(fileName);
     })[0];
     fs.unlinkSync('/var/www/Pet_Clinic/public/videos/'+cc);
+  });
+}
+function writeFile(from, to) {
+  let src = fs.createReadStream(from);
+  let dest = fs.createWriteStream(to);
+  src.pipe(dest);
+  src.on('end', function() {
+    console.log("文件保存成功");
+  });
+  src.on('error', function(err) {
+    console.log(err); 
   });
 }
 
