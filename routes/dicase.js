@@ -116,7 +116,7 @@ router.post('/modifyDicase', Auth, upload.fields([{name:'file'},{name:'video'}])
       await delVid(dicase.dicase_name);
     }
 
-    let sql = `UPDATE pcdb.pc_dicase SET diagnosis_des='${dicase.diagnosis_des}',` +sql1 + sql2 + `treatment_des='${dicase.treatment_des}',diname_id=${dicase.diname_id} WHERE dicase_id='${dicase.dicase_id}'`;
+    let sql = `UPDATE pcdb.pc_dicase SET diagnosis_des='${dicase.diagnosis_des}',` +sql1 + sql2 + `treatment_des='${dicase.treatment_des}' WHERE dicase_id='${dicase.dicase_id}'`;
   
     // let tmp_path = req.files.file[0].path;
     // let tmp_path2 = req.files.video[0].path;
